@@ -1,1 +1,330 @@
-Wassup!!!
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Days to Christmas</title>
+<style>
+  :root {
+    --night-1: #0b1a33;
+    --night-2: #142c52;
+    --red: #d7263d;
+    --green: #1b7f4b;
+    --gold: #f4c95d;
+    --snow: #f7fbff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--snow);
+    background: radial-gradient(ellipse at top, var(--night-2), var(--night-1) 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Snow canvas sits behind everything */
+  #snow { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+
+  /* Moon */
+  .moon {
+    position: fixed; top: 6vh; right: 8vw; width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fffdf0, #e9e3c4 70%);
+    box-shadow: 0 0 60px 15px rgba(255, 250, 220, .25);
+    z-index: 0;
+  }
+
+  /* Snowy ground */
+  .ground {
+    position: fixed; left: -10%; right: -10%; bottom: -60px; height: 180px;
+    background: var(--snow);
+    border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+    box-shadow: 0 -10px 40px rgba(255,255,255,.25);
+    z-index: 2;
+  }
+
+  /* Trees */
+  .tree { position: fixed; bottom: 70px; z-index: 3; }
+  .tree.left  { left: 4vw; }
+  .tree.right { right: 4vw; transform: scale(.8); transform-origin: bottom; }
+  .tree svg { display: block; width: 180px; height: auto; }
+  .light { animation: twinkle 1.6s infinite ease-in-out; }
+  .light:nth-child(2n) { animation-delay: .4s; }
+  .light:nth-child(3n) { animation-delay: .8s; }
+  .light:nth-child(5n) { animation-delay: 1.2s; }
+  .star { animation: glow 2.4s infinite ease-in-out; transform-origin: center; }
+
+  @keyframes twinkle { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+  @keyframes glow { 0%,100% { filter: drop-shadow(0 0 4px var(--gold)); } 50% { filter: drop-shadow(0 0 14px var(--gold)); } }
+
+  /* Light garland across the top */
+  .garland {
+    position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 4;
+    display: flex; justify-content: space-around; padding: 0 2vw;
+  }
+  .garland::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 10px; height: 30px;
+    border-bottom: 2px solid #2d4a2f; border-radius: 0 0 50% 50%;
+  }
+  .bulb {
+    position: relative; width: 14px; height: 22px; margin-top: 22px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: bulb 1.2s infinite alternate;
+  }
+  .bulb::before {
+    content: ""; position: absolute; top: -6px; left: 3px; width: 8px; height: 7px;
+    background: #555; border-radius: 2px;
+  }
+  .bulb:nth-child(4n+1) { --c: #ff4d5e; }
+  .bulb:nth-child(4n+2) { --c: #4dff88; animation-delay: .3s; }
+  .bulb:nth-child(4n+3) { --c: #ffd84d; animation-delay: .6s; }
+  .bulb:nth-child(4n+4) { --c: #4dc3ff; animation-delay: .9s; }
+  .bulb { background: var(--c); box-shadow: 0 0 12px 3px var(--c); }
+  @keyframes bulb { from { opacity: 1; } to { opacity: .35; box-shadow: none; } }
+
+  /* Main card */
+  main {
+    position: relative; z-index: 5;
+    text-align: center;
+    padding: 40px 32px;
+    margin: 0 16px;
+    max-width: 760px; width: 100%;
+    background: rgba(11, 26, 51, .55);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 24px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    margin-bottom: 120px;
+  }
+  .eyebrow {
+    letter-spacing: .3em; text-transform: uppercase; font-size: .85rem;
+    color: var(--gold);
+  }
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    margin: 8px 0 4px;
+    text-shadow: 0 0 20px rgba(215, 38, 61, .6);
+  }
+  h1 span { color: var(--red); }
+  .big {
+    font-size: clamp(5rem, 20vw, 10rem);
+    line-height: 1;
+    font-weight: bold;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(244, 201, 93, .5);
+    margin: 16px 0 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .big-label { font-size: 1.2rem; letter-spacing: .2em; text-transform: uppercase; opacity: .85; }
+
+  .units {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin: 28px auto 8px; max-width: 520px;
+  }
+  .unit {
+    background: linear-gradient(180deg, rgba(215,38,61,.9), rgba(150,20,40,.9));
+    border-radius: 14px; padding: 14px 6px;
+    position: relative; overflow: hidden;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,.2);
+  }
+  .unit:nth-child(even) { background: linear-gradient(180deg, rgba(27,127,75,.95), rgba(15,85,50,.95)); }
+  /* little ribbon to make each box look like a present */
+  .unit::before {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 8px;
+    transform: translateX(-50%); background: rgba(244,201,93,.35);
+  }
+  .unit .n { position: relative; font-size: clamp(1.6rem, 6vw, 2.4rem); font-weight: bold; font-variant-numeric: tabular-nums; }
+  .unit .l { position: relative; font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; opacity: .9; }
+
+  .date { margin-top: 18px; opacity: .75; font-style: italic; }
+
+  .merry .big { font-size: clamp(3rem, 12vw, 6rem); }
+
+  @media (max-width: 640px) {
+    .tree svg { width: 110px; }
+    .tree.right { display: none; }
+    .moon { width: 60px; height: 60px; }
+    main { padding: 28px 16px; }
+    .units { gap: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .light, .star, .bulb { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <canvas id="snow"></canvas>
+  <div class="moon"></div>
+
+  <div class="garland" id="garland"></div>
+
+  <div class="tree left" aria-hidden="true">
+    <svg viewBox="0 0 200 260">
+      <rect x="88" y="215" width="24" height="35" fill="#6b3e1f"/>
+      <polygon points="100,40 30,140 170,140" fill="#1b7f4b"/>
+      <polygon points="100,80 20,190 180,190" fill="#176b40"/>
+      <polygon points="100,120 10,230 190,230" fill="#135c37"/>
+      <g>
+        <circle class="light" cx="80"  cy="110" r="6" fill="#ff4d5e"/>
+        <circle class="light" cx="120" cy="120" r="6" fill="#ffd84d"/>
+        <circle class="light" cx="60"  cy="165" r="6" fill="#4dc3ff"/>
+        <circle class="light" cx="105" cy="160" r="6" fill="#ff4d5e"/>
+        <circle class="light" cx="145" cy="170" r="6" fill="#4dff88"/>
+        <circle class="light" cx="45"  cy="215" r="6" fill="#ffd84d"/>
+        <circle class="light" cx="90"  cy="205" r="6" fill="#4dff88"/>
+        <circle class="light" cx="135" cy="212" r="6" fill="#4dc3ff"/>
+        <circle class="light" cx="165" cy="222" r="6" fill="#ff4d5e"/>
+      </g>
+      <polygon class="star" points="100,12 107,32 128,32 111,44 118,64 100,52 82,64 89,44 72,32 93,32" fill="#f4c95d"/>
+      <!-- presents -->
+      <rect x="20"  y="225" width="40" height="30" fill="#d7263d"/><rect x="37" y="225" width="6" height="30" fill="#f4c95d"/>
+      <rect x="140" y="230" width="34" height="25" fill="#4dc3ff"/><rect x="154" y="230" width="6" height="25" fill="#fff"/>
+    </svg>
+  </div>
+
+  <div class="tree right" aria-hidden="true">
+    <svg viewBox="0 0 200 260">
+      <rect x="88" y="215" width="24" height="35" fill="#6b3e1f"/>
+      <polygon points="100,40 30,140 170,140" fill="#1b7f4b"/>
+      <polygon points="100,80 20,190 180,190" fill="#176b40"/>
+      <polygon points="100,120 10,230 190,230" fill="#135c37"/>
+      <g>
+        <circle class="light" cx="85"  cy="115" r="6" fill="#4dff88"/>
+        <circle class="light" cx="118" cy="105" r="6" fill="#ff4d5e"/>
+        <circle class="light" cx="70"  cy="170" r="6" fill="#ffd84d"/>
+        <circle class="light" cx="130" cy="160" r="6" fill="#4dc3ff"/>
+        <circle class="light" cx="55"  cy="220" r="6" fill="#ff4d5e"/>
+        <circle class="light" cx="110" cy="210" r="6" fill="#ffd84d"/>
+        <circle class="light" cx="150" cy="218" r="6" fill="#4dff88"/>
+      </g>
+      <polygon class="star" points="100,12 107,32 128,32 111,44 118,64 100,52 82,64 89,44 72,32 93,32" fill="#f4c95d"/>
+    </svg>
+  </div>
+
+  <div class="ground"></div>
+
+  <main id="card">
+    <div class="eyebrow">✦ Countdown ✦</div>
+    <h1>Days to <span>Christmas</span></h1>
+    <div class="big" id="days">--</div>
+    <div class="big-label" id="days-label">days to go</div>
+
+    <div class="units" id="units">
+      <div class="unit"><div class="n" id="d">--</div><div class="l">Days</div></div>
+      <div class="unit"><div class="n" id="h">--</div><div class="l">Hours</div></div>
+      <div class="unit"><div class="n" id="m">--</div><div class="l">Minutes</div></div>
+      <div class="unit"><div class="n" id="s">--</div><div class="l">Seconds</div></div>
+    </div>
+
+    <div class="date" id="date"></div>
+  </main>
+
+<script>
+  // ---------- Countdown ----------
+  const $ = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2, '0');
+
+  function nextChristmas(now) {
+    let xmas = new Date(now.getFullYear(), 11, 25); // local midnight, Dec 25
+    // After Christmas Day has ended, target next year
+    if (now >= new Date(now.getFullYear(), 11, 26)) xmas = new Date(now.getFullYear() + 1, 11, 25);
+    return xmas;
+  }
+
+  function tick() {
+    const now = new Date();
+    const xmas = nextChristmas(now);
+    const diff = xmas - now;
+
+    if (diff <= 0) {
+      // It's Christmas Day!
+      $('card').classList.add('merry');
+      $('days').textContent = 'Merry Christmas!';
+      $('days-label').textContent = '🎄 It’s finally here 🎁';
+      $('units').style.display = 'none';
+      $('date').textContent = '';
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    const d = Math.floor(totalSec / 86400);
+    const h = Math.floor(totalSec % 86400 / 3600);
+    const m = Math.floor(totalSec % 3600 / 60);
+    const s = totalSec % 60;
+
+    // "Sleeps" style headline: calendar days remaining
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const calDays = Math.round((xmas - today) / 86400000);
+    $('days').textContent = calDays;
+    $('days-label').textContent = calDays === 1 ? 'day to go — tomorrow!' : 'days to go';
+
+    $('d').textContent = d;
+    $('h').textContent = pad(h);
+    $('m').textContent = pad(m);
+    $('s').textContent = pad(s);
+
+    $('date').textContent = 'Until ' + xmas.toLocaleDateString(undefined, {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ---------- Garland bulbs ----------
+  const garland = $('garland');
+  const bulbCount = Math.max(8, Math.floor(window.innerWidth / 70));
+  for (let i = 0; i < bulbCount; i++) {
+    const b = document.createElement('div');
+    b.className = 'bulb';
+    garland.appendChild(b);
+  }
+
+  // ---------- Snow ----------
+  const canvas = $('snow');
+  const ctx = canvas.getContext('2d');
+  let W, H, flakes = [];
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    const count = Math.floor((W * H) / 9000);
+    flakes = Array.from({ length: count }, () => makeFlake(true));
+  }
+  function makeFlake(randomY) {
+    return {
+      x: Math.random() * W,
+      y: randomY ? Math.random() * H : -10,
+      r: Math.random() * 2.5 + 0.8,
+      vy: Math.random() * 0.8 + 0.4,
+      drift: Math.random() * 0.6 - 0.3,
+      phase: Math.random() * Math.PI * 2,
+      a: Math.random() * 0.5 + 0.5
+    };
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (const f of flakes) {
+      f.phase += 0.01;
+      f.y += f.vy * (f.r / 2);
+      f.x += f.drift + Math.sin(f.phase) * 0.4;
+      if (f.y > H + 10) Object.assign(f, makeFlake(false));
+      if (f.x > W + 10) f.x = -10;
+      if (f.x < -10) f.x = W + 10;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${f.a})`;
+      ctx.fill();
+    }
+    if (!reduced) requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+</script>
+</body>
+</html>
