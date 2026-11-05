@@ -144,6 +144,28 @@
 
   .merry .big { font-size: clamp(3rem, 12vw, 6rem); }
 
+  /* ---------- Naughty reindeer + laughing Santa scene ---------- */
+  main { margin-bottom: 200px; }
+  .scene {
+    position: fixed; bottom: 45px; left: 50%; transform: translateX(-50%);
+    width: min(440px, 80vw); z-index: 4;
+  }
+  .scene svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .buck  { animation: hump .32s infinite alternate ease-in-out; }
+  .doe   { animation: jolt .32s infinite alternate ease-in-out; }
+  .santa { animation: laugh .25s infinite alternate ease-in-out; transform-box: fill-box; transform-origin: bottom center; }
+  .bubble { animation: pop 1s infinite ease-in-out; transform-box: fill-box; transform-origin: center; }
+  .heart { animation: float 2.4s infinite ease-out; opacity: 0; }
+  .heart:nth-of-type(2) { animation-delay: .8s; }
+  .heart:nth-of-type(3) { animation-delay: 1.6s; }
+  .tear { animation: drip 1.2s infinite ease-in; }
+  @keyframes hump  { from { transform: translateX(0); } to { transform: translateX(-7px); } }
+  @keyframes jolt  { from { transform: translateX(0); } to { transform: translateX(-2px); } }
+  @keyframes laugh { from { transform: rotate(-3deg) translateY(0); } to { transform: rotate(3deg) translateY(-3px); } }
+  @keyframes pop   { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+  @keyframes float { 0% { opacity: 0; transform: translateY(0) scale(.6); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-50px) scale(1.1); } }
+  @keyframes drip  { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(14px); opacity: 0; } }
+
   @media (max-width: 640px) {
     .tree svg { width: 110px; }
     .tree.right { display: none; }
@@ -152,7 +174,8 @@
     .units { gap: 8px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .light, .star, .bulb { animation: none; }
+    .light, .star, .bulb, .buck, .doe, .santa, .bubble, .heart, .tear { animation: none; }
+    .heart { opacity: 1; }
   }
 </style>
 </head>
@@ -206,6 +229,108 @@
   </div>
 
   <div class="ground"></div>
+
+  <div class="scene" aria-hidden="true">
+    <svg viewBox="0 0 440 175">
+      <!-- shadow on the snow -->
+      <ellipse cx="170" cy="160" rx="110" ry="8" fill="rgba(0,0,0,.12)"/>
+      <ellipse cx="365" cy="162" rx="45" ry="7" fill="rgba(0,0,0,.12)"/>
+
+      <!-- Reindeer A (front, Rudolph, looking surprised) -->
+      <g class="doe">
+        <rect x="100" y="118" width="8" height="38" rx="3" fill="#6e4520"/>
+        <rect x="116" y="118" width="8" height="38" rx="3" fill="#6e4520"/>
+        <rect x="146" y="118" width="8" height="38" rx="3" fill="#6e4520"/>
+        <rect x="160" y="118" width="8" height="38" rx="3" fill="#6e4520"/>
+        <ellipse cx="135" cy="108" rx="46" ry="22" fill="#8b5a2b"/>
+        <ellipse cx="135" cy="114" rx="30" ry="10" fill="#c49a6c"/>
+        <polygon points="92,104 74,70 92,64 112,100" fill="#8b5a2b"/>
+        <ellipse cx="78" cy="64" rx="17" ry="12" fill="#8b5a2b"/>
+        <ellipse cx="90" cy="54" rx="6" ry="3" fill="#6e4520" transform="rotate(-30 90 54)"/>
+        <path d="M80 54 L76 34 M77 42 L68 36 M78 46 L86 38 M88 52 L92 32 M90 42 L99 36" stroke="#5a3a1a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <!-- wide surprised eye -->
+        <circle cx="80" cy="60" r="5" fill="#fff"/><circle cx="79" cy="60" r="2.3" fill="#111"/>
+        <path d="M74 53 Q80 49 86 53" stroke="#3a240e" stroke-width="1.5" fill="none"/>
+        <!-- little 'o' mouth -->
+        <circle cx="68" cy="71" r="2.4" fill="#3a1b0a"/>
+        <circle cx="61" cy="66" r="6" fill="#ff2a2a"/>
+        <circle cx="59" cy="64" r="2" fill="#ffb3b3"/>
+        <path d="M181 100 q8 -6 6 4" stroke="#8b5a2b" stroke-width="6" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Reindeer B (behind, rearing up, very pleased with himself) -->
+      <g class="buck">
+        <rect x="222" y="122" width="8" height="34" rx="3" fill="#5e3a17"/>
+        <rect x="238" y="122" width="8" height="34" rx="3" fill="#5e3a17"/>
+        <ellipse cx="208" cy="102" rx="42" ry="19" fill="#7a4b20" transform="rotate(35 208 102)"/>
+        <path d="M184 86 L158 96 M190 94 L164 104" stroke="#5e3a17" stroke-width="8" stroke-linecap="round"/>
+        <polygon points="176,84 160,52 176,46 192,80" fill="#7a4b20"/>
+        <ellipse cx="164" cy="46" rx="16" ry="11" fill="#7a4b20"/>
+        <path d="M166 36 L160 14 M162 24 L152 18 M163 28 L172 20 M174 36 L180 16 M177 26 L188 20" stroke="#4a2e10" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <!-- smug half-closed eye + grin -->
+        <circle cx="166" cy="43" r="4.5" fill="#fff"/><circle cx="165" cy="44" r="2" fill="#111"/>
+        <path d="M161 41 L171 41" stroke="#4a2e10" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M150 52 Q156 58 163 53" stroke="#2a1505" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="148" cy="47" r="4" fill="#222"/>
+        <!-- sweat drop -->
+        <path d="M185 38 q3 6 0 8 q-3 -2 0 -8z" fill="#9ad7ff"/>
+      </g>
+
+      <!-- Censor bar keeps it PG-13 -->
+      <g transform="rotate(-12 196 112)">
+        <rect x="160" y="101" width="72" height="20" rx="2" fill="#111"/>
+        <text x="196" y="115.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#fff" letter-spacing="1.5">CENSORED</text>
+      </g>
+
+      <!-- floating hearts -->
+      <g fill="#ff4d7a">
+        <path class="heart" d="M120 30 c-4 -6 -12 -2 -8 4 l8 8 l8 -8 c4 -6 -4 -10 -8 -4z"/>
+        <path class="heart" d="M140 22 c-3 -5 -10 -2 -7 3 l7 7 l7 -7 c3 -5 -4 -8 -7 -3z"/>
+        <path class="heart" d="M105 40 c-3 -5 -10 -2 -7 3 l7 7 l7 -7 c3 -5 -4 -8 -7 -3z"/>
+      </g>
+
+      <!-- Santa, cracking up -->
+      <g class="santa">
+        <rect x="346" y="140" width="13" height="18" fill="#222"/>
+        <rect x="370" y="140" width="13" height="18" fill="#222"/>
+        <ellipse cx="350" cy="158" rx="11" ry="5" fill="#111"/>
+        <ellipse cx="378" cy="158" rx="11" ry="5" fill="#111"/>
+        <ellipse cx="364" cy="118" rx="34" ry="30" fill="#d7263d"/>
+        <rect x="330" y="118" width="68" height="9" fill="#222"/>
+        <rect x="357" y="116" width="14" height="13" rx="2" fill="none" stroke="#f4c95d" stroke-width="3"/>
+        <line x1="364" y1="90" x2="364" y2="146" stroke="#fff" stroke-width="5" opacity=".9"/>
+        <!-- arms: one holding belly, one slapping knee -->
+        <path d="M334 104 Q318 120 340 130" stroke="#d7263d" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <circle cx="342" cy="131" r="6" fill="#fff"/>
+        <path d="M394 104 Q412 122 398 140" stroke="#d7263d" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <circle cx="397" cy="142" r="6" fill="#fff"/>
+        <!-- head -->
+        <circle cx="364" cy="70" r="19" fill="#f6c9a8"/>
+        <path d="M344 70 Q345 104 364 106 Q383 104 384 70 Q374 80 364 80 Q354 80 344 70z" fill="#fff"/>
+        <!-- laughing eyes ^ ^ -->
+        <path d="M352 64 L356 60 L360 64 M368 64 L372 60 L376 64" stroke="#333" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <circle cx="351" cy="71" r="3.5" fill="#ff9a9a" opacity=".7"/>
+        <circle cx="377" cy="71" r="3.5" fill="#ff9a9a" opacity=".7"/>
+        <!-- big open laughing mouth -->
+        <path d="M355 78 Q364 94 373 78 Z" fill="#7a1020"/>
+        <path d="M358 80 Q364 84 370 80" stroke="#ff6b7d" stroke-width="2" fill="none"/>
+        <circle cx="364" cy="73" r="4" fill="#f2a98a"/>
+        <!-- tears of laughter -->
+        <path class="tear" d="M348 66 q-3 6 0 8 q3 -2 0 -8z" fill="#7fd0ff"/>
+        <path class="tear" d="M380 66 q-3 6 0 8 q3 -2 0 -8z" fill="#7fd0ff"/>
+        <!-- hat -->
+        <path d="M345 58 Q352 30 380 28 Q398 30 400 50 L384 56 Z" fill="#d7263d"/>
+        <rect x="342" y="52" width="44" height="10" rx="5" fill="#fff"/>
+        <circle cx="401" cy="52" r="7" fill="#fff"/>
+      </g>
+
+      <!-- speech bubble -->
+      <g class="bubble">
+        <path d="M290 6 h92 a10 10 0 0 1 10 10 v18 a10 10 0 0 1 -10 10 h-34 l-6 12 l-8 -12 h-44 a10 10 0 0 1 -10 -10 v-18 a10 10 0 0 1 10 -10z" fill="#fff" stroke="#d7263d" stroke-width="2"/>
+        <text x="336" y="31" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="bold" fill="#d7263d">HO HO HO!</text>
+      </g>
+    </svg>
+  </div>
 
   <main id="card">
     <div class="eyebrow">✦ Countdown ✦</div>
